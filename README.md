@@ -96,6 +96,10 @@ docker run -it -p 6969:6969 \
 whisper
 ```
 
+That's it! You now should be able to access your whisper server. If running in development mode, this will be:
+
+http://localhost:6969
+
 ## <a name="redis"></a>Redis configuration details
 Currently, whisper.ws requires a redis back end to run. There are four settings that need to be set in the development.json and production.json files:
 
@@ -148,7 +152,7 @@ It's advisable to configure redis to require a password. While it's possible to 
 * "whisper_throttleServer_password"
 * "whisper_configServer_password"
 
-Set these environment variables in order to send a password on connection. For example, if your redis password were "secret", you'd set the following from a macos command line:
+Set these environment variables in order to send a password on connection. For example, if your redis password were "secret", you'd set the following from a MacOS command line:
 
 ```
 export whisper_keyServer_password=secret
