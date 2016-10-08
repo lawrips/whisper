@@ -1,0 +1,70 @@
+﻿<!-- DC Contact Form CSS -->
+<link type="text/css" rel="stylesheet" href="/stylesheets/contact.css" />
+
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-73795131-1', 'auto');
+    ga('send', 'pageview');
+
+    // Replicate placeholder for input boxes and textarea in older browsers
+
+    $(function(){
+        $('input[placeholder], textarea[placeholder]').each(function(){
+            var $placeInput = $(this);
+            
+            if( 'placeholder' in document.createElement('input') ) {
+                var placeholder = true;
+            }
+            else {
+                var placeholder = false;
+                $placeInput.val( $placeInput.attr('placeholder') );
+            }
+            
+            if( !placeholder ) {
+                $placeInput.focusin(function(){
+                    if( $placeInput.val() === $placeInput.attr('placeholder') ) {				
+                        $placeInput.val('');				
+                    }
+                })
+                .focusout(function(){
+                    if( $placeInput.val() === '' ) {
+                        $placeInput.val( $placeInput.attr('placeholder') );
+                    }
+                });
+            }		
+        });
+    });
+</script>
+
+<div class="container top_other">
+    <div class="row"> 
+        <div class=".col-md-6">
+            <h2>Contact Us</h2>
+            {{#if thanks}}
+                <h3> thanks for the note! </h3>
+            {{else}} 
+                <br>
+                <form action="/contact" class="tsc_form_contact_light" method="POST">
+                    <label for="email"> Email (required) </label>
+                    <input type="email" name="email" class="form-input" required />
+                    <label for="message"> Message (required) </label> 
+                    <textarea name="message" class="form-input" required></textarea>
+                    <input class="form-btn" type="submit" value="Send Message" />
+                </form>
+            {{/if}}
+        </div>
+    </div>
+</div>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<p>

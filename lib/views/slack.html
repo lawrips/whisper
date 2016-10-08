@@ -1,0 +1,23 @@
+﻿<div class="container top_other">
+    <div class=".row"> 
+        <div class=".col-md-6">
+            {{#if success}}
+                <h2> Success! </h2>
+                <h4> Slash command /whisper successfully enabled </h4>
+            {{else}} 
+                <h2>Slack</h2>
+            {{/if}}
+            <p>You can use the /whisper command in Slack to share information via one-time URL's (enable whisper in slack via the "add to slack" icon on the top right of the page). If you have already authorized whisper, just go to your slack team and invoke /whisper. For example: </p>
+            <pre> /whisper hello world</pre>
+            <br />
+            <p> This will issue a slash command to whisper.ws, which will generate a one-time URL for you and share it back with the channel: </p>
+            <img src="/images/slackcommand.png" width="500">
+            <br />
+            <br />
+            <p>Anyone in the channel (we recommend this mostly for 1:1 communication) will then be able to click on the URL to view the secret you typed (in this case "hello world"). Once it has been viewed, the URL will be automatically expired and content deleted from our servers.</p>
+        </div>
+    </div>
+<br />
+<br />
+<br />
+<p>

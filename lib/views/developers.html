@@ -1,0 +1,57 @@
+﻿<div class="container top_other">
+    <div class="row"> 
+        <div class=".col-md-1">
+            <h2> Developers </h2>
+            <br />
+            <p>Whisper.ws is an app, but also a platform. We are currently in beta of our developer API / SDK's which are now available for evaluation. We'd love for you to build on top of whisper.ws for any scenario where one-time URL's would be valuable. We recently published a Node.js SDK and will soon document our REST API's.</p>  
+            <h4 > Node.js </h4>
+            <p>Our Node.js library can be downloaded / contributed to / forked over at github. Go grab it <a href="https://github.com/lawrips/whisper">here</a>.</p>                
+            <p> We've published the whisper.ws Node.js SDK to npm to make it easy to download (available <a href="https://www.npmjs.com/package/whisper-ws">here</a>). Installation is easy, as simple as:</p>
+            <pre> npm install --save whisper-ws</pre>
+            <p> Usage of the SDK is quite straightforward:</p>
+<pre>
+var Whisper = require('whisper-ws')
+var whisper = new Whisper({"token": "Ngb1yfg!gbakeIgbE3!ngjqugBhHgfqe"}); // this is a real token you can use for evaluation 
+whisper.set('my secret text', (err, result) => {
+    if (err) console.log(err);
+    console.log(result);
+});
+</pre>            
+            <p> Similarly, getting a secret only requires a couple of lines of code: </p>                
+<pre>
+whisper.set('my secret text', (err, result) => {
+    if (err) console.log(err);
+    console.log(result);
+    whisper.get(result.key, (err, result) => {
+        if (err) console.log(err);
+        console.log(result);
+    });
+});
+</pre>
+            <p> Head on over to <a href="https://github.com/lawrips/whisper">https://github.com/lawrips/whisper</a> for the full documentation. </p> 
+            <h4> Console app </h4>
+            <p> Included in the whisper-ws npm module is also a console app which allows for easy access to whisper.ws from the command line.</p> 
+            <p> To install the console app, install whisper-ws globally using npm: </p>
+            <pre> npm install -g whisper-ws </pre>
+            <p> Once installed, the following options are enabled:</p>
+<pre>
+Options: 
+-h, --help                 output usage information
+-f, --file [file]          the filename to send to whisper.ws
+-t, --text [text]          provide a string rather than a file
+-u, --url [url]            optional: overrides destination server (developers only)
+-e, --encoding [encoding]  optional: specifies encoding (default is utf-8)
+</pre>
+
+            <p>
+            <h4> Account / token </h4>
+            <p> This whisper-ws SDK comes with a token included. This can be found in the file ./config/whisper.json after installing or from github. This is rate limited by IP address and will allow for basic testing. Scale / production use is coming soon. For more details, contact us at at our <b><a href="/contact">contact page</a></b>.
+            <p>
+            <h4> Get involved </h4>
+            <p> To stay informed, feel free to check back here for our upcoming REST API, install us from NPM 
+                or contact us at github (link above). We'd love to hear from you. ..............        
+
+            </p>
+        </div>
+    </div>
+</div>

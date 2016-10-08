@@ -1,0 +1,35 @@
+{
+    "server": {
+        "app": {
+            "slogan": "share stuff instantly"
+        }
+    },
+    "connections": [
+        {
+            "port": 6969,
+            "labels": [
+                "web"
+            ]
+        }
+    ],
+    "registrations": [
+        {
+            "plugin": "./index"
+        },
+        {
+            "plugin": "./public"
+        },
+        {
+            "plugin": "./whisperApi"
+        },
+        {
+            "plugin": "./whisperWeb"
+        },
+        {
+            "plugin": "./links"
+        },
+        {
+            "plugin": "./slack"
+        }
+    ]
+}

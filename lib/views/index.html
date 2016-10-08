@@ -1,0 +1,159 @@
+<link rel="stylesheet" href="/assets/css/highlightjs_default.min.css" />
+<script src="/assets/js/highlight.min.js"></script>
+<script src="/assets/js/highlight.pack.min.js"></script>    
+<script src="/assets/js/clipboard.min.js"></script>    
+<script src="/assets/js/tooltips.js"></script>    
+<script src="/assets/js/snippet.js"></script>    
+
+<script type="text/javascript">        
+    function decodeHtml(html) {
+        var txt = document.createElement("textarea");
+        txt.innerHTML = html;
+        return txt.value;
+    }                      
+</script>
+
+<div class="container top_other">
+    <div class="row"> 
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            {{#if secret}}
+                {{#if secret.secret}}
+                    <br />
+                    <h4> The content that was shared with you </h4>
+                    <h5> (this page can only be viewed once) </h5>
+                    <div class="displaysecretcontainer" id="thesecretcontainer" contentEditable="true">
+                    </div>
+                    <br />
+                    <table>
+                        <tr>
+                            <td>
+                                <input type='checkbox' id='emojifycheck' name='emojifycheck' checked onclick="emojiit();" />
+                            </td>
+                            <td>
+                                <div>Emojify</div>
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                {{/if}}
+                {{#ifvalue error.statusCode value=410}}
+                    <h3>Expired Secret</h3>
+                    <h4>{{ ../error.message }}<h4>
+                {{/ifvalue}}
+                {{#ifvalue error.statusCode value=429}}
+                    <h3>API Throttle Exceeded</h3>
+                    <h4>Message : {{ ../error.message }}</h4>
+                {{/ifvalue}}
+                {{#ifvalue error.statusCode value=404}}
+                    <h3>No Secret Found<h3>
+                    <h4> Message : {{ ../error.message }}</h4>
+                {{/ifvalue}}
+            {{#ifvalue error value="bot"}}
+                <h3>Not a supported browser</h3>
+                <h4> Sorry, you look like a bot<h4>
+            {{/ifvalue}}
+            {{else}} 
+                <h3>Invalid whisper.ws url</h3>
+            {{/if}}
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">                                
+    var displaycontainer;
+    // see if the thing we're about to display is code or not
+    if (hljs.highlightAuto(decodeHtml("{{secret.secret}}")).r < 10) {
+        // if it isn't
+        displaycontainer = document.createElement("div");
+        displaycontainer.className = "displaysecretdiv";
+    } 
+    else {
+        // if it is - use pre to make it look nicer
+        displaycontainer = document.createElement("pre");
+        displaycontainer.className = "displaysecretpre";
+    } 
+    // resize if too many lines
+    if("{{secret.secret}}".split(/\n/).length > 5) {
+        $("#thesecretcontainer").height("400px");   
+    };
+    // now add it ot the page
+    displaycontainer.id = "thesecret";
+    displaycontainer.appendChild(document.createTextNode(decodeHtml("{{secret.secret}}")));                              // Append the text to <li>
+    $(".displaysecretcontainer").append(displaycontainer);
+</script>
+
+<script text="type/javascript">
+    function emojiit() {
+        // add emojs to the page
+        // another ugly hack - fix this later
+        var test = '{{secret.secret}}';
+        if (test.indexOf('/giphy') == -1) {
+            if ($('#emojifycheck')[0].checked) {
+                emojify.setConfig({"img_dir":"/images/emojis"});
+                $( '#thesecret' ).html(emojify.replace("{{secret.secret}}"));
+            }
+            else {
+                $( '#thesecret' ).html("{{secret.secret}}");
+            }            
+        }
+    }
+    
+    $(function() {
+        $('#thesecretcontainer').focus();
+    });
+
+    $(document).ready(function(){
+        $("#thesecretcontainer").on("keypress", function(e) {
+            e.preventDefault();
+        });
+    });
+    
+    $(document).ready(function(){
+        $('.togglebutton').click(function(){
+            $('.replycollapse').fadeIn('fast');
+        });
+    });
+    
+    // ON PAGE LOAD
+    if (!document.queryCommandSupported('copy')) {
+        $('.copysecretbutton').remove();
+    }
+
+    // pretty ugly - but will do for now
+    emojify.setConfig({"img_dir":"/images/emojis"});
+    $('#thesecret').html(emojify.replace("{{secret.secret}}"));
+    
+    if ($('#thesecret').html() && $('#thesecret').html().trim().indexOf('/giphy') == 0) {
+        var text = $('#thesecret').html().trim();
+        
+        var url = 'https://api.giphy.com/v1/gifs/search?q=' + text.split(' ').slice(1) + '&api_key=dc6zaTOxFJmzC&limit=1';
+        $.get(url,
+        function(data, status){
+            if (data.data[0]) {
+                var giphy = data.data[0].images.fixed_height.url;
+                if (giphy) {
+                    $('#thesecret').html( "<img src=\"" + giphy + "\" />");
+                }
+            } 
+        });        
+    }        
+
+    // ON PAGE LOAD
+    var clipboard = new Clipboard('.btn');
+    $('#thesecret').append('<button id="insetcopybutton" class="btn" data-clipboard-target="#thesecret"><img class="clippy" width="13" src="/images/copy.svg"></button>');
+
+    clipboard.on('success', function(e) {
+        showTooltip(e.trigger, 'Copied!');
+        e.clearSelection();
+    });
+
+    clipboard.on('error', function(e) {
+        if (/Macintosh/i.test(navigator.userAgent)) {
+            actionMsg = '⌘-C to copy';
+            showTooltip(e.trigger, actionMsg);
+        }
+
+    });
+</script>
+
+

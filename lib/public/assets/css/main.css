@@ -1,0 +1,103 @@
+ 
+@import url(https://fonts.googleapis.com/css?family=Lato:300,400,700,900);
+@import url(https://fonts.googleapis.com/css?family=Raleway:400,300,700,900);
+
+
+/* Titles */
+h1, h2, h3, h4, h5, h6 {
+    /*font-family: "Raleway";*/
+    font-family: "Arial";
+    font-weight: 350;
+    color: #333;
+}
+
+
+/* Paragraph & Typographic */
+p {
+    line-height: 28px;
+    margin-bottom: 25px;
+}
+
+.mt {
+	margin-top: 40px;
+}
+
+/* Links */
+a {
+    word-wrap: break-word;
+    color: #444444;
+
+    -webkit-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -moz-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -ms-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -o-transition: color 0.1s ease-in, background 0.1s ease-in;
+    transition: color 0.1s ease-in, background 0.1s ease-in;
+}
+
+a:hover,
+a:focus {
+    color: black;
+    text-decoration: none;
+    outline: 0;
+}
+
+a:before,
+a:after {
+    -webkit-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -moz-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -ms-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -o-transition: color 0.1s ease-in, background 0.1s ease-in;
+    transition: color 0.1s ease-in, background 0.1s ease-in;
+}
+
+
+/* Bootstrap Modifications */
+ hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+}
+
+
+#bootstrap-overrides .navbar {
+	font-weight: 700;
+	font-size: 14px;
+	background-color: white;
+    border-bottom: 0px; 
+    padding-bottom: 10px;
+    position: relative;
+}
+
+#bootstrap-overrides .navbar-nav .header-item {
+    color: black;
+    padding-top: 19px;
+}
+
+#bootstrap-overrides .navbar-nav .header-img {
+}
+
+#bootstrap-overrides .header {
+	background-color: #F0F0F0;
+}
+
+/* Footer */
+.footer {
+	background-color: white;
+    width:100%;
+    height:50px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    bottom:0;
+    left:0;
+    right:0;
+    position: absolute;
+    text-align: center;
+    vertical-align: bottom;
+    font-family: sans-serif;
+    font-size: 12px;
+	color: #444444;
+	font-weight: 400;
+}

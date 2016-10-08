@@ -1,0 +1,19 @@
+{
+    "<a_random_key>": {
+        "name": "<your_website>",
+        "id": "1",
+        "noApiLimit": true,
+        "ipRateLimit": {
+            "*": {
+                "limitCount": 20
+            },
+            "404": {
+                "limitCount": 3
+            },
+            "201": {
+                "limitCount": 10
+            },
+            "limitInterval": 20000
+        }
+    }
+}

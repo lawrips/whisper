@@ -1,0 +1,49 @@
+/* 
+* Sample file which contains configuration when in development mode (NODE_ENV=development)
+* Reanme to develoment.json, remove comments, and edit the following values:
+
+* redis.keyServer (redis host / cluster which will store the encryption keys)
+* redis.secretServer (redis host / cluster which will store the encrypted secret)
+* redis.throttleServer (redis host / cluster which will store throttling information (to prevent ddos, etc)
+* redis.configServer (redis host / cluster which will store config related items (initially just slack))
+
+*/
+{
+	"system": {
+		"webUrl": "http://localhost:6969/",
+		"apiUrl": "http://localhost:6969/v1.0/",
+		"maxPostLength": 2048,
+		"bots": [
+			"bot",
+			"facebookexternalhit"	
+		],
+		"keyTTL": 86400,
+		"saltLength": 12
+	},
+	"redis": {
+		"keyServer": {
+			"port": 6379,
+			"host": "localhost",
+			"db": 0
+		},
+		"secretServer": {
+			"port": 6379,
+			"host": "localhost",
+			"db": 0
+		},
+		"throttleServer": {
+			"port": 6379,
+			"host": "localhost",
+			"db": 0
+		},
+		"configServer": {
+			"port": 6379,
+			"host": "localhost",
+			"db": 0
+		}
+	},
+	"log": {
+		"logLevel": 20
+	},
+	"slack": {}
+}

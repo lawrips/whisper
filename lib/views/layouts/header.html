@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=0.8'>
+    <meta name='description' content=''>
+    <meta name='author'  content=''>
+    <title>whisper.ws</title>
+
+    <link href='/assets/css/bootstrap.css' rel='stylesheet' />
+    <!-- Custom styles for this template -->
+    <link href="/assets/css/main.css" rel="stylesheet" />
+    <link href='/stylesheets/style.css' rel='stylesheet' />
+
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+
+
+    <link rel="stylesheet" href="/assets/css/jquery.textcomplete.css"/>
+    <link rel="stylesheet" href="/assets/css/github.css"/>
+    <script src="/assets/js/jquery.textcomplete.js"></script>    
+    <script src="/assets/js/emojies.js"></script>    
+
+
+    <script type="text/javascript">    
+    // emojis
+        function loadCss(filename) {
+            var l = document.createElement('link');
+            l.rel = 'stylesheet';
+            l.href = filename
+            var h = document.getElementsByTagName('head')[0];
+            h.parentNode.insertBefore(l, h);
+        }
+
+        function cb() {
+            loadCss('//cdnjs.cloudflare.com/ajax/libs/emojify.js/0.9.5/emojify.min.css');
+        }
+        window.addEventListener('load', cb);
+    </script>
+
+    <script src="/assets/js/emojify.min.js"></script>
+
+    {{#> header }}
+    {{/header}}
+</head>
+<body id="bootstrap-overrides">
+    <div class="fullpage">
+            <!-- Fixed navbar -->
+        <div class="navbar navbar-default navbar-fixed-top header">
+            <div class="container">
+                <div class="navbar-header">
+                    <a href="/" class="navbar-brand">
+                        <img width="180" src="/logo13_trans.png" />
+                        <div class="tagline"> Share something once, and only once </div>
+                    </a>
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#myNavbar" aria-expanded="false" />
+                        <span class="icon-bar" />
+                        <span class="icon-bar" />
+                        <span class="icon-bar" />
+                </div>
+                <div class="collapse navbar-collapse" id="myNavbar" >
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="/developers" class="header-item"> Developers </a>
+                        </li>
+                        {{#if defaults.contact }}
+                        <li>
+                            <a href="/contact" class="header-item"> Contact </a>
+                        </li>
+                        {{/if}}
+                        <li>
+                            <a href="/about" class="header-item"> About </a>
+                        </li>
+                        <li>
+                            <a href="http://www.github.com/lawrips/whisper" class="header-item"><img width="20" src="/images/github_logo.png"/> View on Github</a>
+                        </li>
+                        {{#if defaults.slack }}
+                        <li>
+                            <a href="https://slack.com/oauth/authorize?scope=bot,commands&client_id={{defaults.slack.slackClientId}}" class="header-img">
+                                <img class="header-img" alt="Add to Slack" height="30" width="104" src="https://platform.slack-edge.com/img/add_to_slack.png" srcset="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" />           
+                            </a>
+                        </li>
+                        {{/if}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {{{content}}}
+        {{#> footer }}
+        {{/footer}}
+    </div>
+</body>
+</html>

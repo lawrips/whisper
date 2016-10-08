@@ -1,0 +1,137 @@
+﻿    <div class="center">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="top_index">
+                <a href="/">
+                    <img width="260" src="/logo13.png" />
+                    <div class="tagline"> Share once, and only once </div>
+                </a>
+            </div>
+
+            <br/>
+            <br/>
+            <br/>
+        </div>
+
+        <div class="input-group input-group-lg-textarea center">
+            <textarea class="form-control" id="secret" placeholder="Enter the text you want to share..."></textarea>
+        </div>
+        {{#> notices }}
+        {{/notices}}
+
+        <div class="error center"></div>
+        <br /> 
+        <button id="create" class="myButton"> Generate Secure Link </button>
+        <br /> 
+        <br /> 
+        <br /> 
+        <div class="linkcollapse">
+            <input class="urldiv center" id="url" /> 
+            <button id="copybutton" data-clipboard-target="#url" class="btn">
+                <img class="clippy" src="/images/copy.svg" height="17" alt="Copy to clipboard" />
+            </button>
+            <p class="notices"> Send this to someone you want to share your text with. It will expire in 24 hrs and can only be viewed once. </p>                                
+            <br /> 
+            <br /> 
+        </div>
+    </div>
+<script type="text/javascript">
+    $('#secret').on('input', function() {
+        var max = 240;
+        var interval = 80;
+        var lines = 3;
+        
+        // increase the size of the textbox every 3 lines (for a max of three times)
+        if($("#secret").val().split(/\n/).length / lines > $("#secret").height() / interval && $("#secret").height() < max) {
+            var newheight = Number.parseInt(($("#secret").val().split(/\n/).length / lines + 1)) * interval;
+            if (newheight > max) newheight = max; 
+            $("#secret").height(newheight + 'px');   
+        }
+        else if(($("#secret").val().split(/\n/).length / lines + 1 < $("#secret").height() / interval) && $("#secret").height() > interval) {
+            var newheight = Number.parseInt(($("#secret").val().split(/\n/).length / lines + 1)) * interval;
+            if (newheight < interval) newheight = interval ; 
+            console.log(newheight)
+            $("#secret").height(newheight + 'px');   
+        }
+    });
+</script>
+
+<script type="text/javascript">
+    // ON PAGE LOAD
+    var createBtn = document.querySelector('.myButton');
+    
+    createBtn.addEventListener('click', function(event) {
+        // ON SUBMIT
+        var mysecret = $('#secret').val();
+        if (mysecret != '') {
+            $('.error').text('');
+            $.post("/i/url", { 
+                secret: mysecret 
+            }).done(function(data){
+                var url = data.webUrl;
+                $('#url').val(url);
+                $('.linkcollapse').fadeIn('fast');
+                if (document.queryCommandSupported('copy')) {
+                    $('#copybutton').show();
+                }
+            }).error(function(error) {
+                $('.error').text(error.responseText);
+                console.log(error);
+            });
+        }
+        else {
+            $('.error').text('Please enter text');
+        }
+    });
+</script>
+    
+<script type="text/javascript">
+    $('#secret').textcomplete([
+        { // emoji strategy
+            match: /\B:([\-+\w]*)$/,
+            search: function (term, callback) {
+                callback($.map(emojies, function (emoji) {
+                    return emoji.indexOf(term) === 0 ? emoji : null;
+                }));
+            },
+            template: function (value) {
+                return '<img width="20" src="/images/emojis/' + value + '.png"></img> ' + value;
+            },
+            replace: function (value) {
+                return ':' + value + ': ';
+            },
+            index: 1
+        },
+    ], {
+        onKeydown: function (e, commands) {
+            if (e.ctrlKey && e.keyCode === 74) { // CTRL-J
+                return commands.KEY_ENTER;
+            }
+        }
+    });        
+    // Use the browser's built-in functionality to quickly and safely escape the
+    // string
+    function escapeHtml(str) {
+        var div = document.createElement('div');
+        div.appendChild(document.createTextNode(str));
+        console.log(div.innerHTML);
+        return div.innerHTML;
+    };
+</script>
+
+<script type="text/javascript">
+    // ON PAGE LOAD
+    var clipboard = new Clipboard('.btn');
+    $('#thesecret').append('<button id="insetcopybutton" class="btn" data-clipboard-target="#thesecret"><img class="clippy" width="13" src="/images/copy.svg" alt="Copy to clipboard"></button>');
+    clipboard.on('success', function(e) {
+        showTooltip(e.trigger, 'Copied!');
+        e.clearSelection();
+    });
+
+    clipboard.on('error', function(e) {
+        if (/Macintosh/i.test(navigator.userAgent)) {
+            actionMsg = 'Press ⌘-C to copy';
+            showTooltip(e.trigger, actionMsg);
+        }
+
+    });
+</script>
