@@ -5,6 +5,21 @@ Whisper.ws is an open source server which allows you to easily and securely shar
 
 A fully managed version of Whisper.ws is hosted up at www.whisper.ws. 
 
+# Features
+* Generation of one time URL's to protect user content
+* Full responsive front end web site and REST API back end
+* Strong encryption of all user content
+* Backed by redis for super fast performance 
+* Built in throttling (by IP, developer key)
+* Slack integration (slack command / bot)
+* REST API's & Node.js SDK
+
+## Future
+* Support for alternative back end DB's
+* Easier setup / installation
+* Some cross device scenarios (maybe)
+* Native mobile client(s)
+
 This documentation will help you get setup with your own installation.   
 
 # Table of contents
