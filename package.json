@@ -11,7 +11,7 @@
   "description": "share once, and only once",
   "author": {
     "name": "lawrips",
-    "email": ""
+    "email": "lawrence@ripsher.com"
   },
   "dependencies": {
     "async": "^1.4.2",
