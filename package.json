@@ -3,12 +3,12 @@
     "node": "6.7.0"
   },
   "name": "whisper",
-  "version": "0.0.1",
-  "private": true,
+  "version": "1.0.0",
+  "private": false,
   "scripts": {
     "start": "node ./server.js"
   },
-  "description": "whisper sharel",
+  "description": "share once, and only once",
   "author": {
     "name": "lawrips",
     "email": ""
