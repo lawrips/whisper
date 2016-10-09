@@ -106,7 +106,7 @@ docker run -it -p 6969:6969 \
 -e "NODE_ENV"="development" \
 -e "PORT"=6969 \
 -e "whisper_websiteDeveloperKey"="<dev_key_from_step_2>" \
--e "whisper_encryptionPassword"="<a_32_char_strong_password> \
+-e "whisper_encryptionPassword"="<a_32_char_strong_password>" \
 -e "DEBUG"="whisper" \
 whisper
 ```
