@@ -115,6 +115,16 @@ That's it! You now should be able to access your whisper server. If running in d
 
 http://localhost:6969
 
+### Tests
+There are some e2e tests in the directory /tests. To run these, ensure mocha is installed (npm i mocha -g) and perform the following:
+
+1. Edit the file /test/test.json and set the token to be the same value as in step_2 above
+2. Run the comamnd:
+
+```
+mocha --debug ./test
+```
+
 ## <a name="redis"></a>Redis configuration details
 Currently, whisper.ws requires a redis back end to run. There are four settings that need to be set in the development.json and production.json files:
 
