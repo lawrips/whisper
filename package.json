@@ -3,7 +3,7 @@
     "node": "6.7.0"
   },
   "name": "whisper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
   "scripts": {
     "start": "node ./server.js"
@@ -41,6 +41,11 @@
     "stylus": "0.42.3",
     "url-pattern": "^1.0.1",
     "vision": "^4.0.1",
+    "whisper-ws": "^1.0.4"
+  },
+  "devDependencies": {
+    "mocha": "^3.1.0",
+    "should": "^11.1.0",
     "whisper-ws": "^1.0.4"
   }
 }
