@@ -1,4 +1,10 @@
-﻿    <div class="center">
+﻿<script type="text/javascript">
+function openWin() {
+    window.open('/validate', "_blank", "height=200,width=400");
+}
+</script>
+
+    <div class="center">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="top_index">
                 <a href="/">
@@ -20,7 +26,35 @@
 
         <div class="error center"></div>
         <br /> 
+        
+        <!-- popup for pairing / sending to mobile -->
+        <div>            
+        <button id="sendMobile" class="myButton"> Send to Mobile </button>
+        <div id="light" class="white_content">
+            <h2>Pair your mobile</h2>
+            To send a whisper to your mobile device, you need to validate your mobile number.
+            <br>
+            <br>
+            <br>
+            <div class="row"> 
+                <div class="col-lg-6">
+                    Please enter your mobile number:
+                </div>
+                <div class="col-lg-4">
+                    <input id="mobileNumber" type="text" value="14254490949"></input>
+                </div>
+                <div class="col-lg-2">
+                    <input id="pairMobile" type="button" value="Send"></input>
+                </div>
+            </div>
+            <br />
+            <br />
+            <br />
+            <br />
+            <input type="button" value="Close" style="position:absolute; bottom:20px" onclick="document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'"></input>
+        </div>
         <button id="create" class="myButton"> Generate Secure Link </button>
+        <div id="fade" class="black_overlay"></div>
         <br /> 
         <br /> 
         <br /> 
@@ -34,7 +68,10 @@
             <br /> 
         </div>
     </div>
+
+
 <script type="text/javascript">
+    // the textarea where you enter your secret
     $('#secret').on('input', function() {
         var max = 240;
         var interval = 80;
@@ -56,8 +93,64 @@
 </script>
 
 <script type="text/javascript">
+
     // ON PAGE LOAD
-    var createBtn = document.querySelector('.myButton');
+    var sendMobileBtn = document.querySelector('#sendMobile');
+
+    sendMobile.addEventListener('click', function(event) {
+        // cookie will be set if this browser has been paired with a mobile device
+        if (document.cookie.indexOf('uuid=') > -1) {
+            // get the secret and send to mobile 
+            var mysecret = $('#secret').val();
+            if (mysecret != '') {
+                $('.error').text('');
+                $.post("/i/url", { 
+                    secret: mysecret 
+                }).done(function(data){                    
+                    // send the URL to any connected paired mobile devices
+                    var url = data.webUrl;
+                    $.post("/sendWS", { 
+                        url: url
+                    }).done(function(data){
+                        console.log(data);
+                    }).error(function(error) {
+                        console.log(error);
+                    });
+
+                }).error(function(error) {
+                    $('.error').text(error.responseText);
+                    console.log(error);
+                });
+            }            
+            else {
+                $('.error').text('Please enter text');
+            }
+        }        
+        else {
+            document.getElementById('light').style.display='block';
+            document.getElementById('fade').style.display='block'
+        }
+    });
+
+    // ON PAGE LOAD
+    var pairMobileBtn = document.querySelector('#pairMobile');
+    
+    pairMobileBtn.addEventListener('click', function(event) {
+        // ON SUBMIT
+        var mobileNumber = $('#mobileNumber').val();
+        $.post("/pair", { 
+            mobileNumber: mobileNumber 
+        }).done(function(data){
+            document.cookie = 'uuid=' + data.uuid;
+            console.log(data);
+        }).error(function(error) {
+            console.log(error);
+        });
+    });
+
+
+    // ON PAGE LOAD
+    var createBtn = document.querySelector('#create');
     
     createBtn.addEventListener('click', function(event) {
         // ON SUBMIT
