@@ -102,6 +102,8 @@ function openWin() {
         if (document.cookie.indexOf('uuid=') > -1) {
             // get the secret and send to mobile 
             var mysecret = $('#secret').val();
+            var uuid = document.cookie.slice(document.cookie.indexOf('uuid=') + 5, document.cookie.indexOf(';', document.cookie.indexOf('uuid=') + 1));
+
             if (mysecret != '') {
                 $('.error').text('');
                 $.post("/i/url", { 
@@ -109,8 +111,9 @@ function openWin() {
                 }).done(function(data){                    
                     // send the URL to any connected paired mobile devices
                     var url = data.webUrl;
-                    $.post("/sendWS", { 
-                        url: url
+                    $.post("/mobile", { 
+                        url: url,
+                        uuid: uuid
                     }).done(function(data){
                         console.log(data);
                     }).error(function(error) {
