@@ -3,7 +3,7 @@
 <script src="/assets/js/highlight.pack.min.js"></script>    
 <script src="/assets/js/clipboard.min.js"></script>    
 <script src="/assets/js/tooltips.js"></script>    
-<script src="/assets/js/snippet.js"></script>    
+<script type="text/javascript" src="/assets/js/anchorme.js"></script>
 
 <script type="text/javascript">        
     function decodeHtml(html) {
@@ -78,7 +78,8 @@
     };
     // now add it ot the page
     displaycontainer.id = "thesecret";
-    displaycontainer.appendChild(document.createTextNode(decodeHtml("{{secret.secret}}")));                              // Append the text to <li>
+    let secret = "{{secret.secret}}"
+    displaycontainer.appendChild(document.createTextNode(decodeHtml(secret)));                              // Append the text to <li>
     $(".displaysecretcontainer").append(displaycontainer);
 </script>
 
@@ -121,7 +122,9 @@
 
     // pretty ugly - but will do for now
     emojify.setConfig({"img_dir":"/images/emojis"});
-    $('#thesecret').html(emojify.replace("{{secret.secret}}"));
+    var theSecret = "{{secret.secret}}";
+    theSecret = anchorme.js(theSecret);
+    $('#thesecret').html(emojify.replace(theSecret));    
     
     if ($('#thesecret').html() && $('#thesecret').html().trim().indexOf('/giphy') == 0) {
         var text = $('#thesecret').html().trim();
