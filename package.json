@@ -34,6 +34,7 @@
     "newrelic": "^1.25.5",
     "node-uuid": "^1.4.7",
     "nodemailer": "^2.3.0",
+    "query-string": "^4.2.3",
     "ratelimiter": "https://github.com/lawrips/node-ratelimiter.git#get_without_increment",
     "request": "^2.69.0",
     "serve-favicon": "~2.1.3",

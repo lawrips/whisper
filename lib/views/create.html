@@ -32,26 +32,19 @@ function openWin() {
         <button id="sendMobile" class="myButton"> Send to Mobile </button>
         <div id="light" class="white_content">
             <h2>Pair your mobile</h2>
-            To send a whisper to your mobile device, you need to validate your mobile number.
+            To send a message <to></to> your mobile device, you need to pair it first to this browser. Type the following code in the whisper.ws mobile app
             <br>
             <br>
             <br>
             <div class="row"> 
-                <div class="col-lg-6">
-                    Please enter your mobile number:
-                </div>
-                <div class="col-lg-4">
-                    <input id="mobileNumber" type="text" value="14254490949"></input>
-                </div>
-                <div class="col-lg-2">
-                    <input id="pairMobile" type="button" value="Send"></input>
+                <div class="pairingCode" id="pairingCode" style="font-family: courier; font-size: 24pt">
                 </div>
             </div>
             <br />
             <br />
             <br />
             <br />
-            <input type="button" value="Close" style="position:absolute; bottom:20px" onclick="document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'"></input>
+            <input type="button" value="Close" style="position:relative; bottom:20px" onclick="document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'"></input>
         </div>
         <button id="create" class="myButton"> Generate Secure Link </button>
         <div id="fade" class="black_overlay"></div>
@@ -96,15 +89,56 @@ function openWin() {
 
     // ON PAGE LOAD
     var sendMobileBtn = document.querySelector('#sendMobile');
+    var uuid;
+    
+    // tell if we've been paired before'
+    var paired = document.cookie.indexOf('uuid=') > -1 ? true: false;
+;
 
     sendMobile.addEventListener('click', function(event) {
+
+        // generate a new pairing code
+        $.post("/pair", { 
+
+        }).done(function(data){                    
+            $('#pairingCode').text(data.code);
+            listenForPair(data.code);
+
+            // keep generating a new one every 60s
+            setInterval(function() {
+                if (!paired) {
+                    $.post("/pair", { 
+
+                    }).done(function(data){                    
+                        listenForPair(data.code);
+                        $('#pairingCode').text(data.code)
+                    });
+                }
+            }, 60000);
+        });
+
+        // connect to a websocket to be notified when pairing is complete
+        var listenForPair = function(code) {
+            var ws = new WebSocket('{{wsUrl}}?code=' + code);
+            ws.onmessage = (e) => {
+                console.log('receiving an incoming pairing code confirmation: ' + e.data);
+                document.cookie = 'uuid=' + e.data;
+                uuid = e.data;
+                paired = true;
+                $('#pairingCode').text('Paired √')                
+            };
+        }
+
         // cookie will be set if this browser has been paired with a mobile device
         if (document.cookie.indexOf('uuid=') > -1) {
             // get the secret and send to mobile 
             var mysecret = $('#secret').val();
-            // ugly hack for now
-            var uuid = document.cookie.slice(document.cookie.indexOf('uuid=') + 5, document.cookie.indexOf(';', document.cookie.indexOf('uuid=') + 3));
+            // ugly hack for now to get the uuid
+            if (!uuid) {
+                uuid = document.cookie.slice(document.cookie.indexOf('uuid=') + 5, document.cookie.indexOf(';', document.cookie.indexOf('uuid=') + 3));
+            }
 
+            // create a secret url
             if (mysecret != '') {
                 $('.error').text('');
                 $.post("/i/url", { 
@@ -134,22 +168,6 @@ function openWin() {
             document.getElementById('light').style.display='block';
             document.getElementById('fade').style.display='block'
         }
-    });
-
-    // ON PAGE LOAD
-    var pairMobileBtn = document.querySelector('#pairMobile');
-    
-    pairMobileBtn.addEventListener('click', function(event) {
-        // ON SUBMIT
-        var mobileNumber = $('#mobileNumber').val();
-        $.post("/pair", { 
-            mobileNumber: mobileNumber 
-        }).done(function(data){
-            document.cookie = 'uuid=' + data.uuid;
-            console.log(data);
-        }).error(function(error) {
-            console.log(error);
-        });
     });
 
 
