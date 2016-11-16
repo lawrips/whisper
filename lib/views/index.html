@@ -1,6 +1,3 @@
-<link rel="stylesheet" href="/assets/css/highlightjs_default.min.css" />
-<script src="/assets/js/highlight.min.js"></script>
-<script src="/assets/js/highlight.pack.min.js"></script>    
 <script src="/assets/js/clipboard.min.js"></script>    
 <script src="/assets/js/tooltips.js"></script>    
 <script type="text/javascript" src="/assets/js/anchorme.js"></script>
@@ -60,18 +57,9 @@
 </div>
 
 <script type="text/javascript">                                
-    var displaycontainer;
-    // see if the thing we're about to display is code or not
-    if (hljs.highlightAuto(decodeHtml("{{secret.secret}}")).r < 10) {
-        // if it isn't
-        displaycontainer = document.createElement("div");
-        displaycontainer.className = "displaysecretdiv";
-    } 
-    else {
-        // if it is - use pre to make it look nicer
-        displaycontainer = document.createElement("pre");
-        displaycontainer.className = "displaysecretpre";
-    } 
+    var displaycontainer = document.createElement("div");
+    displaycontainer.className = "displaysecretdiv";
+
     // resize if too many lines
     if("{{secret.secret}}".split(/\n/).length > 5) {
         $("#thesecretcontainer").height("400px");   
