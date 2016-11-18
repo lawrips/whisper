@@ -139,9 +139,9 @@ body {
     font-weight: 600;
 	font-family:Arial;
 	font-size:13px;
-	padding:6px 24px;
+	padding:6px 4px;
     border: 2px solid #E2E2E2;
-    width: 200px;
+    width: 180px;
 }
 
 .myButton:hover {

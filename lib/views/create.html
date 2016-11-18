@@ -2,65 +2,82 @@
 function openWin() {
     window.open('/validate', "_blank", "height=200,width=400");
 }
+
+function unpair() {
+    Cookies.remove('uuid');
+    $('#pairedIcon').hide();
+}
 </script>
 
-    <div class="center">
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <div class="top_index">
-                <a href="/">
-                    <img width="260" src="/logo13.png" />
-                    <div class="tagline"> Share once, and only once </div>
-                </a>
-            </div>
-
-            <br/>
-            <br/>
-            <br/>
+<div class="center">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="top_index">
+            <a href="/">
+                <img width="260" src="/logo13.png" />
+                <div class="tagline"> Share once, and only once </div>
+            </a>
         </div>
 
-        <div class="input-group input-group-lg-textarea center">
-            <textarea class="form-control" id="secret" placeholder="Enter the text you want to share..."></textarea>
-        </div>
-        {{#> notices }}
-        {{/notices}}
+        <br/>
+        <br/>
+        <br/>
+    </div>
 
-        <div class="error center"></div>
-        <br /> 
+    <div class="input-group input-group-lg-textarea center">
+        <textarea class="form-control" id="secret" placeholder="Enter the text you want to share..."></textarea>
+    </div>
+    {{#> notices }}
+    {{/notices}}
+
+    <div class="error center"></div>
+    <br /> 
+    
+    <!-- popup for pairing / sending to mobile -->
+
+    <div id="light" class="white_content">
+        <h2>Pair your mobile</h2>
+        To send a message <to></to> your mobile device, you need to pair it first to this browser. Type the following code in the whisper.ws mobile app
+        <br>
+        <br>
+        <br>
+        <div class="row"> 
+            <div class="pairingCode" id="pairingCode" style="font-family: courier; font-size: 24pt"></div>
+        </div>
+        <br />
+        <br />
+        <br />
+        <br />
+        <input type="button" value="Close" style="position:relative; bottom:20px" onclick="document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'">
+        </input>
+    </div>
+
         
-        <!-- popup for pairing / sending to mobile -->
-        <div>            
-        <button id="sendMobile" class="myButton"> Send to Mobile </button>
-        <div id="light" class="white_content">
-            <h2>Pair your mobile</h2>
-            To send a message <to></to> your mobile device, you need to pair it first to this browser. Type the following code in the whisper.ws mobile app
-            <br>
-            <br>
-            <br>
-            <div class="row"> 
-                <div class="pairingCode" id="pairingCode" style="font-family: courier; font-size: 24pt">
-                </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3" style="float:none;display:inline-block;">
+                <button id="sendMobile" class="myButton"> Send to Mobile </button>
+                <img id="pairedIcon" src="/images/paired.png" width="20" alt="Paired to a mobile. Click to unpair" onclick="unpair();"/>
             </div>
-            <br />
-            <br />
-            <br />
-            <br />
-            <input type="button" value="Close" style="position:relative; bottom:20px" onclick="document.getElementById('light').style.display='none';document.getElementById('fade').style.display='none'"></input>
-        </div>
-        <button id="create" class="myButton"> Generate Secure Link </button>
-        <div id="fade" class="black_overlay"></div>
-        <br /> 
-        <br /> 
-        <br /> 
-        <div class="linkcollapse">
-            <input class="urldiv center" id="url" /> 
-            <button id="copybutton" data-clipboard-target="#url" class="btn">
-                <img class="clippy" src="/images/copy.svg" height="17" alt="Copy to clipboard" />
-            </button>
-            <p class="notices"> Send this to someone you want to share your text with. It will expire in 24 hrs and can only be viewed once. </p>                                
-            <br /> 
-            <br /> 
+            <div class="col-sm-3" style="float:none;display:inline-block;">
+                <button id="create" class="myButton"> Generate Secure Link </button>
+                <div id="fade" class="black_overlay"></div>
+            </div>
         </div>
     </div>
+    <br  />
+
+    <div class="linkcollapse">
+        <input class="urldiv center" id="url" /> 
+        <button id="copybutton" data-clipboard-target="#url" class="btn">
+            <img class="clippy" src="/images/copy.svg" height="17" alt="Copy to clipboard" />
+        </button>
+        <p class="notices"> Send this to someone you want to share your text with. It will expire in 24 hrs and can only be viewed once. </p>                                
+        <br /> 
+        <br /> 
+    </div>
+
+
+</div>
 
 
 <script type="text/javascript">
@@ -92,7 +109,10 @@ function openWin() {
     var uuid;
     
     // tell if we've been paired before'
-    var paired = document.cookie.indexOf('uuid=') > -1 ? true: false;
+    var paired = Cookies.get('uuid') ? true: false;
+    if (!paired) {
+        $('#pairedIcon').hide();        
+    }
 ;
 
     sendMobile.addEventListener('click', function(event) {
@@ -122,20 +142,21 @@ function openWin() {
             var ws = new WebSocket('{{wsUrl}}?code=' + code);
             ws.onmessage = (e) => {
                 console.log('receiving an incoming pairing code confirmation: ' + e.data);
-                document.cookie = 'uuid=' + e.data;
+                Cookies.set('uuid', + e.data);
                 uuid = e.data;
                 paired = true;
-                $('#pairingCode').text('Paired √')                
+                $('#pairingCode').text('Paired ✓');
+                $('#pairedIcon').show();           
             };
         }
 
         // cookie will be set if this browser has been paired with a mobile device
-        if (document.cookie.indexOf('uuid=') > -1) {
+        if (Cookies.get('uuid')) {
             // get the secret and send to mobile 
             var mysecret = $('#secret').val();
             // ugly hack for now to get the uuid
             if (!uuid) {
-                uuid = document.cookie.slice(document.cookie.indexOf('uuid=') + 5, document.cookie.indexOf(';', document.cookie.indexOf('uuid=') + 3));
+                uuid = Cookies.get('uuid');
             }
 
             // create a secret url
