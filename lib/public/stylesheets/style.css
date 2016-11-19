@@ -67,6 +67,10 @@ body {
     font-size: 12px;
 }
 
+.result {
+    font-size: 14px;
+}
+
 .theme-showcase > p > .btn {
   margin: 5px 0;
 }
@@ -171,6 +175,10 @@ body {
 }
 
 .linkcollapse {
+    display:none;
+}
+
+.mobilecollapse {
     display:none;
 }
 
@@ -311,6 +319,43 @@ body {
     font-weight: lighter;
 }
 
+.tooltip2 {
+    position: relative;
+    display: inline-block;
+}
+
+/* Tooltip text */
+.tooltip2 .tooltiptext2 {
+    visibility: hidden;
+    width: 250px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 15px 0;
+    border-radius: 6px;
+ 
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+    bottom: 35px;
+    left: -115px;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip2:hover .tooltiptext2 {
+    visibility: visible;
+}
+
+.tooltip2 .tooltiptext2::after {
+    content: " ";
+    position: absolute;
+    top: 100%; /* At the bottom of the tooltip */
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+}
 
 .tooltipped{
     position:relative

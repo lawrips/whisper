@@ -51,12 +51,15 @@ function unpair() {
         </input>
     </div>
 
-        
+
     <div class="container">
         <div class="row">
             <div class="col-sm-3" style="float:none;display:inline-block;">
                 <button id="sendMobile" class="myButton"> Send to Mobile </button>
-                <img id="pairedIcon" src="/images/paired.png" width="20" alt="Paired to a mobile. Click to unpair" onclick="unpair();"/>
+                <div class="tooltip2">
+                    <img id="pairedIcon" src="/images/paired2.png" width="20" alt="Paired to a mobile. Click to unpair" onclick="unpair();"/>
+                    <span class="tooltiptext2">You are currently paired to a mobile device. Click this to unpair</span>
+                </div>                
             </div>
             <div class="col-sm-3" style="float:none;display:inline-block;">
                 <button id="create" class="myButton"> Generate Secure Link </button>
@@ -65,6 +68,10 @@ function unpair() {
         </div>
     </div>
     <br  />
+
+    <div class="mobilecollapse">
+        <p class="result"></p>                                
+    </div>
 
     <div class="linkcollapse">
         <input class="urldiv center" id="url" /> 
@@ -113,42 +120,9 @@ function unpair() {
     if (!paired) {
         $('#pairedIcon').hide();        
     }
-;
 
     sendMobile.addEventListener('click', function(event) {
 
-        // generate a new pairing code
-        $.post("/pair", { 
-
-        }).done(function(data){                    
-            $('#pairingCode').text(data.code);
-            listenForPair(data.code);
-
-            // keep generating a new one every 60s
-            setInterval(function() {
-                if (!paired) {
-                    $.post("/pair", { 
-
-                    }).done(function(data){                    
-                        listenForPair(data.code);
-                        $('#pairingCode').text(data.code)
-                    });
-                }
-            }, 60000);
-        });
-
-        // connect to a websocket to be notified when pairing is complete
-        var listenForPair = function(code) {
-            var ws = new WebSocket('{{wsUrl}}?code=' + code);
-            ws.onmessage = (e) => {
-                console.log('receiving an incoming pairing code confirmation: ' + e.data);
-                Cookies.set('uuid', + e.data);
-                uuid = e.data;
-                paired = true;
-                $('#pairingCode').text('Paired ✓');
-                $('#pairedIcon').show();           
-            };
-        }
 
         // cookie will be set if this browser has been paired with a mobile device
         if (Cookies.get('uuid')) {
@@ -162,6 +136,7 @@ function unpair() {
             // create a secret url
             if (mysecret != '') {
                 $('.error').text('');
+                console.log(uuid)
                 $.post("/i/url", { 
                     secret: mysecret 
                 }).done(function(data){                    
@@ -171,9 +146,14 @@ function unpair() {
                         url: url,
                         uuid: uuid
                     }).done(function(data){
-                        console.log(data);
+                        console.log('sent: ' + data);
+                        $('.mobilecollapse').fadeIn('fast');
+                        $('.mobilecollapse').text('Message was sent. Check your mobile device for the message.') 
                     }).error(function(error) {
-                        console.log(error);
+                        console.log('error here: ' + JSON.stringify(error));
+                        $('.mobilecollapse').fadeIn('fast');
+                        $('.mobilecollapse').text('This browser does not seem to be paired. Try pairing again from mobile.') 
+                        unpair();
                     });
 
                 }).error(function(error) {
@@ -188,6 +168,40 @@ function unpair() {
         else {
             document.getElementById('light').style.display='block';
             document.getElementById('fade').style.display='block'
+
+            // generate a new pairing code
+            $.post("/pair", { 
+
+            }).done(function(data){                    
+                $('#pairingCode').text(data.code);
+                listenForPair(data.code);
+
+                // keep generating a new one every 60s
+                setInterval(function() {
+                    if (!paired) {
+                        $.post("/pair", { 
+
+                        }).done(function(data){                    
+                            listenForPair(data.code);
+                            $('#pairingCode').text(data.code)
+                        });
+                    }
+                }, 60000);
+            });
+
+            // connect to a websocket to be notified when pairing is complete
+            var listenForPair = function(code) {
+                var ws = new WebSocket('{{wsUrl}}?code=' + code);
+                ws.onmessage = (e) => {
+                    console.log('receiving an incoming pairing code confirmation: ' + e.data);
+                    Cookies.set('uuid', e.data);
+                    uuid = e.data;
+                    paired = true;
+                    $('#pairingCode').text('Paired ✓');
+                    $('#pairedIcon').show();           
+                };
+            }
+
         }
     });
 
