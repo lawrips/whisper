@@ -5,7 +5,8 @@ function openWin() {
 
 function unpair() {
     Cookies.remove('uuid');
-    $('#pairedIcon').hide();
+    $('#pairedIcon').css('visibility','hidden');
+    $('#pairedTip').css('visibility','hidden');
 }
 </script>
 
@@ -58,7 +59,7 @@ function unpair() {
                 <button id="sendMobile" class="myButton"> Send to Mobile </button>
                 <div class="tooltip2">
                     <img id="pairedIcon" src="/images/paired2.png" width="20" alt="Paired to a mobile. Click to unpair" onclick="unpair();"/>
-                    <span class="tooltiptext2">You are currently paired to a mobile device. Click this to unpair</span>
+                    <span id="pairedTip" class="tooltiptext2">You are currently paired to a mobile device. Click this to unpair</span>
                 </div>                
             </div>
             <div class="col-sm-3" style="float:none;display:inline-block;">
@@ -118,7 +119,8 @@ function unpair() {
     // tell if we've been paired before'
     var paired = Cookies.get('uuid') ? true: false;
     if (!paired) {
-        $('#pairedIcon').hide();        
+        $('#pairedIcon').css('visibility','hidden');       
+        $('#pairedTip').css('visibility','hidden');       
     }
 
     sendMobile.addEventListener('click', function(event) {
@@ -132,6 +134,9 @@ function unpair() {
             if (!uuid) {
                 uuid = Cookies.get('uuid');
             }
+
+            $('.mobilecollapse').hide(); 
+            $('.linkcollapse').hide();
 
             // create a secret url
             if (mysecret != '') {
@@ -147,7 +152,7 @@ function unpair() {
                         uuid: uuid
                     }).done(function(data){
                         console.log('sent: ' + data);
-                        $('.mobilecollapse').fadeIn('fast');
+                        $('.mobilecollapse').fadeIn('slow');
                         $('.mobilecollapse').text('Message was sent. Check your mobile device for the message.') 
                     }).error(function(error) {
                         console.log('error here: ' + JSON.stringify(error));
@@ -198,7 +203,8 @@ function unpair() {
                     uuid = e.data;
                     paired = true;
                     $('#pairingCode').text('Paired ✓');
-                    $('#pairedIcon').show();           
+                    $('#pairedIcon').css('visibility','');       
+                    $('#pairedTip').css('visibility','');       
                 };
             }
 
@@ -211,6 +217,8 @@ function unpair() {
     
     createBtn.addEventListener('click', function(event) {
         // ON SUBMIT
+        $('.mobilecollapse').hide(); 
+
         var mysecret = $('#secret').val();
         if (mysecret != '') {
             $('.error').text('');
